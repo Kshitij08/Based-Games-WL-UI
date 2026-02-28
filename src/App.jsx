@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Wallet, Share2, Trophy, Ticket, Users, Twitter, 
-  MessageCircle, Repeat, CheckCircle2, Copy, Star, Zap, Home
+  MessageCircle, Repeat, Heart, CheckCircle2, Copy, Star, Zap, Home, User
 } from 'lucide-react';
 
 // --- MOCK DATA ---
@@ -23,32 +23,47 @@ const CUTOFFS = {
   rank500: 2100
 };
 
+// Updated Tasks corresponding to the PRD
 const TASKS = [
-  { id: 't1', category: 'Community', title: 'Follow @abc (Twitter)', points: 250, icon: Twitter, color: 'bg-sky-500' },
-  { id: 't2', category: 'Community', title: 'Follow @abc (BaseApp)', points: 250, icon: Zap, color: 'bg-blue-600' },
-  { id: 't3', category: 'Community', title: 'Join Discord', points: 250, icon: MessageCircle, color: 'bg-indigo-500' },
-  { id: 't4', category: 'Community', title: 'Join Telegram', points: 250, icon: Share2, color: 'bg-blue-400' },
-  { id: 't5', category: 'One-Time Boosts', title: 'Original Post (Twitter)', points: 300, icon: Twitter, color: 'bg-sky-500' },
-  { id: 't6', category: 'One-Time Boosts', title: 'Original Post (BaseApp)', points: 300, icon: Zap, color: 'bg-blue-600' },
-  { id: 't7', category: 'One-Time Boosts', title: 'Quote Tweet (Twitter)', points: 200, icon: Repeat, color: 'bg-sky-500' },
-  { id: 't8', category: 'One-Time Boosts', title: 'Quote Tweet (BaseApp)', points: 200, icon: Repeat, color: 'bg-blue-600' },
-  { id: 't9', category: 'One-Time Boosts', title: 'Retweet (Twitter)', points: 150, icon: Repeat, color: 'bg-sky-500' },
-  { id: 't10', category: 'One-Time Boosts', title: 'Retweet (BaseApp)', points: 150, icon: Repeat, color: 'bg-blue-600' },
-  { id: 't15', category: 'Daily Grind', title: 'Daily Check-in', points: 50, icon: CheckCircle2, color: 'bg-green-500' },
-  { id: 't16', category: 'Daily Grind', title: 'Daily Post (Twitter)', points: 250, icon: Twitter, color: 'bg-sky-500' },
-  { id: 't17', category: 'Daily Grind', title: 'Daily Post (BaseApp)', points: 250, icon: Zap, color: 'bg-blue-600' },
+  // Community Actions
+  { id: 'c1', category: 'Community', title: 'Follow @abc (Twitter)', points: 250, icon: Twitter, color: 'bg-sky-500' },
+  { id: 'c2', category: 'Community', title: 'Follow @abc (BaseApp)', points: 250, icon: Zap, color: 'bg-blue-600' },
+  { id: 'c3', category: 'Community', title: 'Join Discord', points: 250, icon: MessageCircle, color: 'bg-indigo-500' },
+  { id: 'c4', category: 'Community', title: 'Join TG', points: 250, icon: Share2, color: 'bg-blue-400' },
+  
+  // Post & Engagement
+  { id: 'p1', category: 'Posts & Engagement', title: 'Post tagging @abc (Twitter)', points: 300, icon: Twitter, color: 'bg-sky-500' },
+  { id: 'p2', category: 'Posts & Engagement', title: 'Post tagging @abc (BaseApp)', points: 300, icon: Zap, color: 'bg-blue-600' },
+  { id: 'p3', category: 'Posts & Engagement', title: 'Quote Tweet (Twitter)', points: 200, icon: Repeat, color: 'bg-sky-500' },
+  { id: 'p4', category: 'Posts & Engagement', title: 'Quote Tweet (BaseApp)', points: 200, icon: Repeat, color: 'bg-blue-600' },
+  { id: 'p5', category: 'Posts & Engagement', title: 'Retweet (Twitter)', points: 150, icon: Repeat, color: 'bg-sky-500' },
+  { id: 'p6', category: 'Posts & Engagement', title: 'Retweet (BaseApp)', points: 150, icon: Repeat, color: 'bg-blue-600' },
+  { id: 'p7', category: 'Posts & Engagement', title: 'Comment (Twitter)', points: 100, icon: MessageCircle, color: 'bg-sky-500' },
+  { id: 'p8', category: 'Posts & Engagement', title: 'Comment (BaseApp)', points: 100, icon: MessageCircle, color: 'bg-blue-600' },
+  { id: 'p9', category: 'Posts & Engagement', title: 'Like (Twitter)', points: 50, icon: Heart, color: 'bg-sky-500' },
+  { id: 'p10', category: 'Posts & Engagement', title: 'Like (BaseApp)', points: 50, icon: Heart, color: 'bg-blue-600' },
+  
+  // Daily Actions
+  { id: 'd1', category: 'Daily Grind', title: 'Daily Check-in', points: 50, icon: CheckCircle2, color: 'bg-green-500' },
+  { id: 'd2', category: 'Daily Grind', title: 'Daily Post (Twitter)', points: 250, icon: Twitter, color: 'bg-sky-500' },
+  { id: 'd3', category: 'Daily Grind', title: 'Daily Post (BaseApp)', points: 250, icon: Zap, color: 'bg-blue-600' },
 ];
 
 export default function App() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [username, setUsername] = useState('');
-  const [activeTab, setActiveTab] = useState('home'); // 'home', 'quests', 'leaderboard'
+  const [activeTab, setActiveTab] = useState('home'); // 'home', 'quests', 'leaderboard', 'profile'
   
-  // User Stats
+  // User Stats & Profile
   const [points, setPoints] = useState(0);
   const [rank, setRank] = useState('Unranked');
   const [completedTasks, setCompletedTasks] = useState([]);
   const [referrals, setReferrals] = useState(0);
+  const [twitterConnected, setTwitterConnected] = useState(false);
+
+  // Mock Profile Data
+  const walletAddress = "0x7F...4A2b";
+  const ethBalance = "0.045";
 
   const tickets = Math.floor(points / 500);
 
@@ -79,6 +94,7 @@ export default function App() {
 
   const simulateReferral = () => {
     setReferrals(prev => prev + 1);
+    // Logic corresponding to PRD: 1-5 = 200, 6-20 = 300, 21+ = 500
     let refPoints = referrals < 5 ? 200 : referrals < 20 ? 300 : 500;
     setPoints(prev => prev + refPoints);
   };
@@ -126,14 +142,58 @@ export default function App() {
     );
   }
 
-  // --- DASHBOARD (MOBILE LAYOUT) ---
+  // Helper for Desktop Navigation styling
+  const getNavBtnClass = (id, baseColor, activeColor) => `
+    w-full flex items-center gap-4 p-4 rounded-2xl font-black uppercase transition-all border-4 
+    ${activeTab === id 
+      ? `bg-white border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${activeColor} translate-x-2` 
+      : `border-transparent text-slate-500 hover:bg-slate-200 hover:text-slate-800`
+    }
+  `;
+
+  // --- DASHBOARD LAYOUT (RESPONSIVE DESKTOP & MOBILE) ---
   return (
-    <div className="min-h-screen bg-slate-200 flex justify-center font-sans text-slate-900">
-      {/* Mobile Container Simulator */}
-      <div className="w-full max-w-md bg-sky-50 min-h-screen border-x-4 border-black relative shadow-[8px_0_15px_rgba(0,0,0,0.2)] flex flex-col">
+    <div className="flex h-screen w-full bg-slate-200 font-sans text-slate-900 overflow-hidden">
+      
+      {/* DESKTOP SIDEBAR (Hidden on Mobile) */}
+      <aside className="hidden md:flex w-80 bg-slate-100 border-r-4 border-black flex-col shadow-[4px_0_15px_rgba(0,0,0,0.1)] z-50 relative">
+        <div className="p-8 border-b-4 border-black bg-white">
+          <h1 className="text-4xl font-black italic text-blue-600 uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">BASED<br/>GAMES</h1>
+        </div>
         
-        {/* Header */}
-        <header className="bg-white border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
+        <nav className="flex-1 p-6 space-y-4 overflow-y-auto">
+          <button onClick={() => setActiveTab('home')} className={getNavBtnClass('home', '', 'text-pink-600')}>
+            <Home size={28} className={activeTab === 'home' ? 'fill-pink-100' : ''} /> Home
+          </button>
+          <button onClick={() => setActiveTab('quests')} className={getNavBtnClass('quests', '', 'text-blue-600')}>
+            <Star size={28} className={activeTab === 'quests' ? 'fill-blue-100' : ''} /> Quests
+          </button>
+          <button onClick={() => setActiveTab('leaderboard')} className={getNavBtnClass('leaderboard', '', 'text-yellow-600')}>
+            <Trophy size={28} className={activeTab === 'leaderboard' ? 'fill-yellow-100' : ''} /> Ranks
+          </button>
+          <button onClick={() => setActiveTab('profile')} className={getNavBtnClass('profile', '', 'text-green-600')}>
+            <User size={28} className={activeTab === 'profile' ? 'fill-green-100' : ''} /> Profile
+          </button>
+        </nav>
+
+        <div className="p-6 border-t-4 border-black bg-white flex justify-between items-center">
+          <div className="flex items-center gap-3">
+             <div className="w-10 h-10 bg-sky-100 rounded-xl border-2 border-black flex items-center justify-center text-xl">
+               {getAvatar()}
+             </div>
+             <div>
+               <p className="font-black text-sm uppercase">{username}</p>
+               <p className="text-xs font-bold text-slate-500">{ethBalance} ETH</p>
+             </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT AREA */}
+      <main className="flex-1 flex flex-col h-screen relative bg-sky-50 overflow-hidden">
+        
+        {/* Mobile Header (Hidden on Desktop) */}
+        <header className="md:hidden bg-white border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
           <h1 className="text-2xl font-black italic text-blue-600 uppercase">BASED</h1>
           <div className="bg-sky-100 border-2 border-black px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse border border-black"></div>
@@ -141,224 +201,317 @@ export default function App() {
           </div>
         </header>
 
-        {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto p-4 pb-28 custom-scrollbar">
-          
-          {/* TAB: HOME */}
-          {activeTab === 'home' && (
-            <div className="space-y-6 animate-in slide-in-from-left-4 fade-in duration-200">
-              {/* Shareable Card */}
-              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent mix-blend-overlay"></div>
-                
-                <div className="flex justify-between items-start relative z-10 mb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-14 h-14 bg-white rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-3xl">
-                      {getAvatar()}
+        {/* Desktop Header Banner */}
+        <header className="hidden md:flex bg-white border-b-4 border-black p-6 justify-between items-center z-30">
+           <h2 className="text-3xl font-black uppercase text-slate-800">{activeTab}</h2>
+           <div className="bg-blue-600 text-white border-4 border-black px-5 py-2 rounded-xl font-black flex items-center gap-3 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+             <span>RANK #{rank}</span>
+             <span className="text-yellow-300">• {points.toLocaleString()} PTS</span>
+           </div>
+        </header>
+
+        {/* Scrollable Container (Fixed pb-28 on mobile to ensure it scrolls past the bottom nav) */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 md:pb-8 custom-scrollbar">
+          <div className="max-w-3xl mx-auto h-full">
+
+            {/* TAB: HOME */}
+            {activeTab === 'home' && (
+              <div className="space-y-6 animate-in slide-in-from-left-4 fade-in duration-200">
+                {/* Shareable Card */}
+                <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent mix-blend-overlay"></div>
+                  
+                  <div className="flex justify-between items-start relative z-10 mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 bg-white rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-4xl">
+                        {getAvatar()}
+                      </div>
+                      <div>
+                        <h2 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] leading-none mb-1">{username}</h2>
+                        <p className="font-bold text-yellow-300 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">Rank #{rank}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-black text-white drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] leading-none mb-1">{username}</h2>
-                      <p className="font-bold text-yellow-300 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)] text-sm">Rank #{rank}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
+                    <div className="bg-black/20 p-3 rounded-xl border-2 border-black/30 backdrop-blur-sm">
+                      <p className="text-blue-100 text-xs font-black uppercase tracking-wider mb-1">Total Points</p>
+                      <p className="text-2xl font-black text-white">{points.toLocaleString()}</p>
+                    </div>
+                    <div className="bg-black/20 p-3 rounded-xl border-2 border-black/30 backdrop-blur-sm">
+                      <p className="text-blue-100 text-xs font-black uppercase tracking-wider mb-1">Tickets</p>
+                      <div className="flex items-center gap-2">
+                        <Ticket className="text-pink-400 w-6 h-6" />
+                        <p className="text-2xl font-black text-white">{tickets}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-400 text-black p-3 rounded-xl border-2 border-black font-black text-center relative z-10 transform -rotate-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-6 md:text-lg">
+                    STACK POINTS. WIN PASSES. GET BASED.
+                  </div>
+
+                  <button 
+                    onClick={handleShare}
+                    className="w-full bg-pink-500 text-white font-black py-4 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-all flex justify-center items-center gap-2 text-lg"
+                  >
+                    <Twitter size={20} /> Share to X
+                  </button>
+                </div>
+
+                {/* Lottery Progress Widget */}
+                <div className="bg-white rounded-3xl p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="font-black uppercase flex items-center gap-2 text-xl">
+                      <Ticket className="text-pink-500" size={24} /> Lottery
+                    </h3>
+                    <span className="font-black text-pink-500 text-lg">{points % 500} / 500</span>
+                  </div>
+                  
+                  <div className="w-full bg-sky-100 rounded-full h-5 border-2 border-black overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] mb-4">
+                    <div 
+                      className="bg-pink-500 h-full border-r-2 border-black transition-all duration-500 ease-out"
+                      style={{ width: `${(points % 500) / 5}%` }}
+                    ></div>
+                  </div>
+                  
+                  <p className="font-bold text-slate-600 text-center mb-4">Every 500 pts = 1 Lottery Ticket</p>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-slate-100 border-2 border-black rounded-xl p-3 text-center flex flex-col items-center justify-center">
+                      <span className="font-black text-lg text-slate-800">$25 Pass</span>
+                      <span className="text-sm font-bold text-pink-600">25 Winners</span>
+                    </div>
+                    <div className="bg-slate-100 border-2 border-black rounded-xl p-3 text-center flex flex-col items-center justify-center">
+                      <span className="font-black text-lg text-slate-800">$5 Pass</span>
+                      <span className="text-sm font-bold text-blue-600">100 Winners</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-5 relative z-10">
-                  <div className="bg-black/20 p-2.5 rounded-xl border-2 border-black/30 backdrop-blur-sm">
-                    <p className="text-blue-100 text-[10px] font-black uppercase tracking-wider mb-0.5">Total Points</p>
-                    <p className="text-xl font-black text-white">{points.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-black/20 p-2.5 rounded-xl border-2 border-black/30 backdrop-blur-sm">
-                    <p className="text-blue-100 text-[10px] font-black uppercase tracking-wider mb-0.5">Tickets</p>
-                    <div className="flex items-center gap-1">
-                      <Ticket className="text-pink-400 w-5 h-5" />
-                      <p className="text-xl font-black text-white">{tickets}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-yellow-400 text-black p-2 rounded-xl border-2 border-black font-black text-center relative z-10 transform -rotate-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">
-                  STACK POINTS. WIN PASSES.
-                </div>
-
-                <button 
-                  onClick={handleShare}
-                  className="mt-5 w-full bg-pink-500 text-white font-black py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-all flex justify-center items-center gap-2"
-                >
-                  <Twitter size={18} /> Share to X
-                </button>
-              </div>
-
-              {/* Lottery Progress Widget */}
-              <div className="bg-white rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-black uppercase flex items-center gap-2 text-lg">
-                    <Ticket className="text-pink-500" size={20} /> Next Ticket
+                {/* Referral Box */}
+                <div className="bg-blue-600 text-white rounded-3xl p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                  <h3 className="text-xl font-black uppercase mb-1 flex items-center gap-2 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                    <Users size={22} /> Refer Squad
                   </h3>
-                  <span className="font-black text-pink-500 text-sm">{points % 500} / 500</span>
+                  <p className="font-bold text-blue-200 text-sm mb-4">
+                    Current Multiplier: <span className="text-yellow-400 font-black px-1">{referrals < 5 ? '200' : referrals < 20 ? '300' : '500'} pts</span> per invite
+                  </p>
+                  
+                  <div className="bg-white text-black p-4 rounded-xl border-2 border-black font-mono font-bold text-lg flex items-center justify-between mb-5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
+                    <span>{username.toLowerCase()}-based</span>
+                    <Copy size={20} className="text-slate-400 cursor-pointer hover:text-slate-600" />
+                  </div>
+
+                  <button 
+                    onClick={simulateReferral}
+                    className="w-full bg-yellow-400 text-black font-black py-4 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-all uppercase text-lg"
+                  >
+                    Simulate Referral ({referrals})
+                  </button>
                 </div>
-                <div className="w-full bg-sky-100 rounded-full h-4 border-2 border-black overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
-                  <div 
-                    className="bg-pink-500 h-full border-r-2 border-black transition-all duration-500 ease-out"
-                    style={{ width: `${(points % 500) / 5}%` }}
-                  ></div>
-                </div>
-                <p className="text-xs font-bold text-slate-500 mt-2 text-center">Every 500 pts = 1 Raffle Entry for $25/$5 Passes</p>
               </div>
+            )}
 
-              {/* Referral Box */}
-              <div className="bg-blue-600 text-white rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <h3 className="text-xl font-black uppercase mb-1 flex items-center gap-2 drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
-                  <Users size={20} /> Refer Squad
-                </h3>
-                <p className="font-bold text-blue-200 text-xs mb-4">
-                  Current Multiplier: <span className="text-yellow-400 font-black">{referrals < 5 ? '200' : referrals < 20 ? '300' : '500'} pts</span>
-                </p>
-                
-                <div className="bg-white text-black p-3 rounded-xl border-2 border-black font-mono font-bold text-sm flex items-center justify-between mb-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
-                  <span>{username.toLowerCase()}-based</span>
-                  <Copy size={16} className="text-slate-400" />
-                </div>
-
-                <button 
-                  onClick={simulateReferral}
-                  className="w-full bg-yellow-400 text-black font-black py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-all uppercase text-sm"
-                >
-                  Simulate Referral ({referrals})
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB: QUESTS */}
-          {activeTab === 'quests' && (
-            <div className="space-y-6 animate-in slide-in-from-right-4 fade-in duration-200">
-              {['Community', 'One-Time Boosts', 'Daily Grind'].map(category => (
-                <div key={category} className="bg-white rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                  <h4 className="text-lg font-black text-black uppercase mb-4 flex items-center gap-2">
-                    <Star className="text-yellow-400 fill-yellow-400 stroke-black stroke-2" size={20} />
-                    {category}
-                  </h4>
-                  <div className="space-y-3">
-                    {TASKS.filter(t => t.category === category).map(task => {
-                      const isCompleted = completedTasks.includes(task.id);
-                      return (
-                        <div 
-                          key={task.id}
-                          onClick={() => !isCompleted && completeTask(task.id, task.points)}
-                          className={`flex items-center justify-between p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                            isCompleted 
-                              ? 'bg-slate-100 border-slate-300 opacity-60' 
-                              : 'bg-white border-black active:bg-sky-50 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)]'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-white shrink-0 ${task.color} ${isCompleted && 'grayscale'}`}>
-                              <task.icon size={14} />
+            {/* TAB: QUESTS */}
+            {activeTab === 'quests' && (
+              <div className="space-y-6 animate-in slide-in-from-right-4 fade-in duration-200">
+                {['Community', 'Posts & Engagement', 'Daily Grind'].map(category => (
+                  <div key={category} className="bg-white rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                    <h4 className="text-xl font-black text-black uppercase mb-4 flex items-center gap-2">
+                      <Star className="text-yellow-400 fill-yellow-400 stroke-black stroke-2" size={24} />
+                      {category}
+                    </h4>
+                    <div className="space-y-3">
+                      {TASKS.filter(t => t.category === category).map(task => {
+                        const isCompleted = completedTasks.includes(task.id);
+                        return (
+                          <div 
+                            key={task.id}
+                            onClick={() => !isCompleted && completeTask(task.id, task.points)}
+                            className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                              isCompleted 
+                                ? 'bg-slate-100 border-slate-300 opacity-60' 
+                                : 'bg-white border-black active:bg-sky-50 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-[3px] active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-50'
+                            }`}
+                          >
+                            <div className="flex items-center gap-4">
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-white shrink-0 ${task.color} ${isCompleted && 'grayscale'}`}>
+                                <task.icon size={18} />
+                              </div>
+                              <span className={`font-bold md:text-lg ${isCompleted ? 'text-slate-500 line-through' : 'text-slate-900'}`}>
+                                {task.title}
+                              </span>
                             </div>
-                            <span className={`font-bold text-sm ${isCompleted ? 'text-slate-500 line-through' : 'text-slate-900'}`}>
-                              {task.title}
+                            <span className={`font-black shrink-0 ml-2 md:text-lg ${isCompleted ? 'text-slate-400' : 'text-pink-600'}`}>
+                              +{task.points}
                             </span>
                           </div>
-                          <span className={`font-black shrink-0 ml-2 ${isCompleted ? 'text-slate-400' : 'text-pink-600'}`}>
-                            +{task.points}
-                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* TAB: LEADERBOARD */}
+            {activeTab === 'leaderboard' && (
+              <div className="animate-in slide-in-from-bottom-4 fade-in duration-200 flex flex-col min-h-full pb-4">
+                <div className="space-y-6">
+                  {/* Detailed Cutoffs Banner */}
+                  <div className="bg-sky-100 border-4 border-black rounded-3xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-3">
+                    <div className="flex justify-between items-center bg-white p-4 rounded-2xl border-2 border-black">
+                      <div className="flex items-center gap-3">
+                        <Trophy className="text-yellow-500" size={24} />
+                        <span className="font-black text-lg">Top 100</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-pink-600 font-black block text-lg">$25 Pass</span>
+                        <span className="text-slate-500 text-sm font-bold">Cutoff: {CUTOFFS.rank100.toLocaleString()} pts</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center bg-white p-4 rounded-2xl border-2 border-black">
+                      <div className="flex items-center gap-3">
+                        <Trophy className="text-slate-400" size={24} />
+                        <span className="font-black text-lg">Rank 101 - 500</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-blue-600 font-black block text-lg">$5 Pass</span>
+                        <span className="text-slate-500 text-sm font-bold">Cutoff: {CUTOFFS.rank500.toLocaleString()} pts</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Leaderboard List */}
+                  <div className="bg-white rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+                    <div className="p-5 bg-yellow-400 border-b-4 border-black text-center">
+                      <h3 className="text-xl font-black uppercase text-black drop-shadow-[1px_1px_0px_rgba(255,255,255,1)]">
+                        Global Top 10
+                      </h3>
+                    </div>
+                    <div className="divide-y-2 divide-black/10">
+                      {LEADERBOARD_DATA.map((user) => (
+                        <div key={user.rank} className="flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors">
+                          <div className="flex items-center gap-4">
+                            <span className={`font-black w-6 text-center text-lg ${user.rank <= 3 ? 'text-pink-600' : 'text-slate-400'}`}>
+                              {user.rank}
+                            </span>
+                            <span className="text-3xl">{user.avatar}</span>
+                            <span className="font-bold text-slate-900 text-lg">{user.username}</span>
+                          </div>
+                          <div className="font-black text-blue-600 text-lg">{user.points.toLocaleString()}</div>
                         </div>
-                      );
-                    })}
+                      ))}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
 
-          {/* TAB: LEADERBOARD */}
-          {activeTab === 'leaderboard' && (
-            <div className="animate-in slide-in-from-bottom-4 fade-in duration-200 space-y-4">
-              
-              {/* Cutoffs Banner */}
-              <div className="bg-sky-100 border-4 border-black rounded-2xl p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm font-bold flex flex-col gap-2">
-                <div className="flex justify-between items-center bg-white p-2 rounded-lg border-2 border-black">
-                  <span>🏆 Top 100:</span>
-                  <span className="text-pink-600 font-black">{CUTOFFS.rank100.toLocaleString()} pts</span>
+                {/* Sticky User Rank (Kept within document flow at the bottom, avoids overlap) */}
+                <div className="sticky bottom-0 mt-6 bg-blue-600 border-4 border-black rounded-2xl p-4 flex justify-between items-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-10 md:hidden">
+                  <div className="flex items-center gap-3">
+                    <span className="font-black text-xl">YOU</span>
+                    <span className="text-sm bg-black/20 px-3 py-1.5 rounded-lg font-bold border border-black/30">Rank #{rank}</span>
+                  </div>
+                  <div className="font-black text-yellow-300 text-xl">{points.toLocaleString()} pts</div>
                 </div>
-                <div className="flex justify-between items-center bg-white p-2 rounded-lg border-2 border-black">
-                  <span>🏅 Top 500:</span>
-                  <span className="text-pink-600 font-black">{CUTOFFS.rank500.toLocaleString()} pts</span>
-                </div>
+
               </div>
+            )}
 
-              {/* Leaderboard List */}
-              <div className="bg-white rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-                <div className="p-4 bg-yellow-400 border-b-4 border-black text-center">
-                  <h3 className="text-lg font-black uppercase text-black drop-shadow-[1px_1px_0px_rgba(255,255,255,1)]">
-                    Global Top 10
+            {/* TAB: PROFILE */}
+            {activeTab === 'profile' && (
+              <div className="space-y-6 animate-in slide-in-from-right-4 fade-in duration-200">
+                {/* Twitter Connection */}
+                <div className="bg-white rounded-3xl p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                  <h3 className="font-black uppercase mb-5 flex items-center gap-2 text-xl">
+                    <Twitter className="text-sky-500 fill-sky-500" size={24} /> Twitter Integration
                   </h3>
-                </div>
-                <div className="divide-y-2 divide-black/10">
-                  {LEADERBOARD_DATA.map((user) => (
-                    <div key={user.rank} className="flex items-center justify-between p-3 bg-white">
-                      <div className="flex items-center gap-3">
-                        <span className={`font-black w-5 text-center text-sm ${user.rank <= 3 ? 'text-pink-600' : 'text-slate-400'}`}>
-                          {user.rank}
-                        </span>
-                        <span className="text-xl">{user.avatar}</span>
-                        <span className="font-bold text-sm text-slate-900">{user.username}</span>
+                  
+                  {twitterConnected ? (
+                    <div className="flex items-center justify-between bg-sky-50 p-4 rounded-2xl border-2 border-black">
+                      <span className="font-black text-lg text-slate-800">@{username}</span>
+                      <div className="flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full border-2 border-green-500 font-bold text-sm">
+                        <CheckCircle2 size={16} /> Connected
                       </div>
-                      <div className="font-black text-sm text-blue-600">{user.points.toLocaleString()}</div>
                     </div>
-                  ))}
+                  ) : (
+                    <button 
+                      onClick={() => setTwitterConnected(true)} 
+                      className="w-full bg-sky-500 text-white font-black py-4 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-all text-lg flex justify-center items-center gap-2"
+                    >
+                      Connect Twitter Profile
+                    </button>
+                  )}
+                </div>
+
+                {/* Wallet Details */}
+                <div className="bg-white rounded-3xl p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                  <h3 className="font-black uppercase mb-5 flex items-center gap-2 text-xl">
+                    <Wallet className="text-yellow-500" size={24} /> Wallet Details
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-slate-100 p-4 rounded-2xl border-2 border-black flex justify-between items-center">
+                      <span className="font-black text-slate-500 uppercase text-sm">Address</span>
+                      <span className="font-mono font-bold text-slate-800">{walletAddress}</span>
+                    </div>
+                    <div className="bg-slate-100 p-4 rounded-2xl border-2 border-black flex justify-between items-center">
+                      <span className="font-black text-slate-500 uppercase text-sm">Network</span>
+                      <span className="font-black text-blue-600 flex items-center gap-1">
+                        <Zap size={16} className="fill-blue-600" /> Base
+                      </span>
+                    </div>
+                    <div className="bg-slate-100 p-4 rounded-2xl border-2 border-black flex justify-between items-center">
+                      <span className="font-black text-slate-500 uppercase text-sm">Balance</span>
+                      <span className="font-black text-slate-800">{ethBalance} ETH</span>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => { setIsRegistered(false); setActiveTab('home'); }}
+                    className="w-full mt-6 bg-red-500 text-white font-black py-4 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-all uppercase text-lg"
+                  >
+                    Disconnect Wallet
+                  </button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+
+          </div>
         </div>
 
-        {/* --- BOTTOM NAVIGATION BAR --- */}
-        <nav className="absolute bottom-0 w-full bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50">
-          
-          <button 
-            onClick={() => setActiveTab('home')}
-            className={`flex flex-col items-center gap-1 p-2 w-20 transition-all ${activeTab === 'home' ? 'text-pink-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}
-          >
+        {/* --- MOBILE BOTTOM NAVIGATION BAR (Hidden on Desktop) --- */}
+        <nav className="md:hidden absolute bottom-0 w-full bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50">
+          <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'home' ? 'text-pink-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
             <Home size={24} className={activeTab === 'home' ? 'fill-pink-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Home</span>
-            {activeTab === 'home' && <div className="absolute -bottom-1 w-1 h-1 bg-pink-600 rounded-full"></div>}
+            {activeTab === 'home' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-pink-600 rounded-full"></div>}
           </button>
           
-          <button 
-            onClick={() => setActiveTab('quests')}
-            className={`flex flex-col items-center gap-1 p-2 w-20 transition-all ${activeTab === 'quests' ? 'text-blue-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}
-          >
+          <button onClick={() => setActiveTab('quests')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'quests' ? 'text-blue-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
             <Star size={24} className={activeTab === 'quests' ? 'fill-blue-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Quests</span>
-            {activeTab === 'quests' && <div className="absolute -bottom-1 w-1 h-1 bg-blue-600 rounded-full"></div>}
+            {activeTab === 'quests' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-blue-600 rounded-full"></div>}
           </button>
           
-          <button 
-            onClick={() => setActiveTab('leaderboard')}
-            className={`flex flex-col items-center gap-1 p-2 w-20 transition-all ${activeTab === 'leaderboard' ? 'text-yellow-500 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}
-          >
+          <button onClick={() => setActiveTab('leaderboard')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'leaderboard' ? 'text-yellow-500 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
             <Trophy size={24} className={activeTab === 'leaderboard' ? 'fill-yellow-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Ranks</span>
-            {activeTab === 'leaderboard' && <div className="absolute -bottom-1 w-1 h-1 bg-yellow-500 rounded-full"></div>}
+            {activeTab === 'leaderboard' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>}
+          </button>
+
+          <button onClick={() => setActiveTab('profile')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'profile' ? 'text-green-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
+            <User size={24} className={activeTab === 'profile' ? 'fill-green-100' : ''} />
+            <span className="text-[10px] font-black uppercase tracking-wider">Profile</span>
+            {activeTab === 'profile' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-green-600 rounded-full"></div>}
           </button>
         </nav>
 
-        {/* Sticky User Rank overlay on Leaderboard Tab */}
-        {activeTab === 'leaderboard' && (
-          <div className="absolute bottom-20 left-4 right-4 bg-blue-600 border-4 border-black rounded-xl p-3 flex justify-between items-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-40 animate-in slide-in-from-bottom-8">
-            <div className="flex items-center gap-2">
-              <span className="font-black">YOU</span>
-              <span className="text-xs bg-black/20 px-2 py-1 rounded-md font-bold border border-black/30">Rank #{rank}</span>
-            </div>
-            <div className="font-black text-yellow-300">{points.toLocaleString()} pts</div>
-          </div>
-        )}
-
-      </div>
+      </main>
       
-      {/* Hide Scrollbar for cleaner mobile look */}
+      {/* Hide Scrollbar CSS */}
       <style dangerouslySetInnerHTML={{__html: `
         .custom-scrollbar::-webkit-scrollbar { display: none; }
         .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
