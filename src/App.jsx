@@ -107,22 +107,33 @@ export default function App() {
   // --- LOGIN SCREEN ---
   if (!isRegistered) {
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans text-slate-900 selection:bg-pink-500 selection:text-white">
-        <div className="w-full max-w-md bg-white text-slate-900 p-8 rounded-3xl border-8 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center relative overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-pink-400 rounded-full border-4 border-black z-0"></div>
-          <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-400 rounded-full border-4 border-black z-0"></div>
-          
+      <div className="min-h-screen flex items-center justify-center p-4 font-sans text-slate-900 selection:bg-pink-500 selection:text-white relative">
+        {/* Video background + overlay (same as Home tab) */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        >
+          <source src="/Based%20Games%20Trailer.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-0 pointer-events-none bg-black/60" aria-hidden />
+
+        <div className="w-full max-w-md p-8 rounded-3xl border-8 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center relative z-10 overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600">
           <div className="relative z-10">
-            <h1 className="text-5xl font-black mb-2 tracking-tight text-blue-600 uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-              BASED<br/>GAMES
-            </h1>
-            <p className="font-bold text-lg mb-8 text-slate-700">The most chaotic tournament on Base.</p>
+            <img
+              src="/logo_base.png"
+              alt="Based Games"
+              className="max-w-[200px] w-full h-auto mx-auto mb-4 drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
+            />
+            <p className="font-bold text-lg mb-8 text-white">The most chaotic tournament on Base.</p>
 
             <form onSubmit={handleConnect} className="space-y-4">
               <input 
                 type="text" 
                 placeholder="Enter your Username" 
-                className="w-full p-4 text-xl font-bold rounded-xl border-4 border-black outline-none focus:ring-4 focus:ring-pink-400 focus:border-black transition-all bg-sky-50 text-center"
+                className="w-full p-4 text-xl font-bold rounded-xl border-4 border-black outline-none focus:ring-4 focus:ring-pink-400 focus:border-black transition-all bg-white/90 text-slate-900 text-center placeholder:text-slate-500"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -192,31 +203,17 @@ export default function App() {
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col h-screen relative bg-sky-50 overflow-hidden">
         
-        {/* Background: video + overlay on Home, image on other tabs */}
-        {activeTab === 'home' ? (
-          <>
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
-            >
-              <source src="/Based%20Games%20Trailer.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 z-0 pointer-events-none bg-black/60" aria-hidden />
-          </>
-        ) : (
-          <div
-            className="absolute inset-0 z-0 pointer-events-none opacity-90"
-            style={{
-              backgroundImage: "url('/1.png')",
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-          />
-        )}
+        {/* Video background + overlay on all pages */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        >
+          <source src="/Based%20Games%20Trailer.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-0 pointer-events-none bg-black/60" aria-hidden />
 
         {/* Mobile Header (Hidden on Desktop) */}
         <header className="md:hidden bg-white border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
