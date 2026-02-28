@@ -192,16 +192,31 @@ export default function App() {
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col h-screen relative bg-sky-50 overflow-hidden">
         
-        {/* Background image (public/1.png) – all pages */}
-        <div
-          className="absolute inset-0 z-0 pointer-events-none opacity-90"
-          style={{
-            backgroundImage: "url('/0.png')",
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        />
+        {/* Background: video + overlay on Home, image on other tabs */}
+        {activeTab === 'home' ? (
+          <>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+            >
+              <source src="/Based%20Games%20Trailer.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 z-0 pointer-events-none bg-black/60" aria-hidden />
+          </>
+        ) : (
+          <div
+            className="absolute inset-0 z-0 pointer-events-none opacity-90"
+            style={{
+              backgroundImage: "url('/1.png')",
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
+        )}
 
         {/* Mobile Header (Hidden on Desktop) */}
         <header className="md:hidden bg-white border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
@@ -228,6 +243,14 @@ export default function App() {
             {/* TAB: HOME */}
             {activeTab === 'home' && (
               <div className="space-y-6 animate-in slide-in-from-left-4 fade-in duration-200">
+                {/* Logo */}
+                <div className="flex justify-center">
+                  <img
+                    src="/logo_base.png"
+                    alt="Based Games"
+                    className="max-w-[220px] w-full h-auto drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
+                  />
+                </div>
                 {/* Shareable Card */}
                 <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
                   <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent mix-blend-overlay"></div>
