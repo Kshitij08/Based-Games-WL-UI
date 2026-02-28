@@ -192,6 +192,17 @@ export default function App() {
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col h-screen relative bg-sky-50 overflow-hidden">
         
+        {/* Background image (public/1.png) – all pages */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none opacity-90"
+          style={{
+            backgroundImage: "url('/1.png')",
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        />
+
         {/* Mobile Header (Hidden on Desktop) */}
         <header className="md:hidden bg-white border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
           <h1 className="text-2xl font-black italic text-blue-600 uppercase">BASED</h1>
@@ -210,9 +221,9 @@ export default function App() {
            </div>
         </header>
 
-        {/* Scrollable Container (Fixed pb-28 on mobile to ensure it scrolls past the bottom nav) */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 md:pb-8 custom-scrollbar">
-          <div className="max-w-3xl mx-auto h-full">
+        {/* Scrollable Container – extra bottom padding on mobile so content clears the nav */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 custom-scrollbar relative z-10 min-h-0">
+          <div className="max-w-3xl mx-auto">
 
             {/* TAB: HOME */}
             {activeTab === 'home' && (
@@ -357,7 +368,7 @@ export default function App() {
 
             {/* TAB: LEADERBOARD */}
             {activeTab === 'leaderboard' && (
-              <div className="animate-in slide-in-from-bottom-4 fade-in duration-200 flex flex-col min-h-full pb-4">
+              <div className="animate-in slide-in-from-bottom-4 fade-in duration-200 space-y-6">
                 <div className="space-y-6">
                   {/* Detailed Cutoffs Banner */}
                   <div className="bg-sky-100 border-4 border-black rounded-3xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-3">
@@ -406,17 +417,16 @@ export default function App() {
                       ))}
                     </div>
                   </div>
-                </div>
 
-                {/* Sticky User Rank (Kept within document flow at the bottom, avoids overlap) */}
-                <div className="sticky bottom-0 mt-6 bg-blue-600 border-4 border-black rounded-2xl p-4 flex justify-between items-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-10 md:hidden">
-                  <div className="flex items-center gap-3">
-                    <span className="font-black text-xl">YOU</span>
-                    <span className="text-sm bg-black/20 px-3 py-1.5 rounded-lg font-bold border border-black/30">Rank #{rank}</span>
+                  {/* Your rank card – in flow so it doesn’t hide the leaderboard */}
+                  <div className="bg-blue-600 border-4 border-black rounded-2xl p-4 flex justify-between items-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hidden">
+                    <div className="flex items-center gap-3">
+                      <span className="font-black text-xl">YOU</span>
+                      <span className="text-sm bg-black/20 px-3 py-1.5 rounded-lg font-bold border border-black/30">Rank #{rank}</span>
+                    </div>
+                    <div className="font-black text-yellow-300 text-xl">{points.toLocaleString()} pts</div>
                   </div>
-                  <div className="font-black text-yellow-300 text-xl">{points.toLocaleString()} pts</div>
                 </div>
-
               </div>
             )}
 
@@ -482,8 +492,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* --- MOBILE BOTTOM NAVIGATION BAR (Hidden on Desktop) --- */}
-        <nav className="md:hidden absolute bottom-0 w-full bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50">
+        {/* --- MOBILE BOTTOM NAVIGATION BAR (Shrink-0 inline layout, no longer absolute) --- */}
+        <nav className="md:hidden w-full shrink-0 bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50 relative">
           <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'home' ? 'text-pink-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
             <Home size={24} className={activeTab === 'home' ? 'fill-pink-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Home</span>
