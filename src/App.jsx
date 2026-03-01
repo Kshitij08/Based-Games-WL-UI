@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Wallet, Share2, Trophy, Ticket, Users, Twitter, 
   MessageCircle, Repeat, Heart, CheckCircle2, Copy, Star, Zap, Home, User
@@ -53,7 +53,15 @@ export default function App() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [username, setUsername] = useState('');
   const [activeTab, setActiveTab] = useState('home'); // 'home', 'quests', 'leaderboard', 'profile'
-  
+  const scrollContainerRef = useRef(null);
+
+  // Reset scroll to top when switching tabs
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
+
   // User Stats & Profile
   const [points, setPoints] = useState(0);
   const [rank, setRank] = useState('Unranked');
@@ -260,8 +268,8 @@ export default function App() {
            </div>
         </header>
 
-        {/* Scrollable Container – extra bottom padding on mobile so content clears the nav */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 custom-scrollbar relative z-10 min-h-0">
+        {/* Scrollable Container – extra bottom padding on mobile so content clears the fixed nav */}
+        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 custom-scrollbar relative z-10 min-h-0">
           <div className="max-w-3xl mx-auto">
 
             {/* TAB: HOME */}
@@ -550,8 +558,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* --- MOBILE BOTTOM NAVIGATION BAR (Hidden on Desktop) --- */}
-        <nav className="md:hidden absolute bottom-0 w-full bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50">
+        {/* --- MOBILE BOTTOM NAVIGATION BAR: fixed so always visible at viewport bottom (Hidden on Desktop) --- */}
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50">
           <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'home' ? 'text-pink-600 -translate-y-1' : 'text-slate-800 hover:text-slate-900'}`}>
             <Home size={24} className={activeTab === 'home' ? 'fill-pink-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Home</span>
