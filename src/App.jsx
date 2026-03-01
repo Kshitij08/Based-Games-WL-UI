@@ -186,7 +186,7 @@ export default function App() {
         }}
       >
         <div className="p-8 border-b-4 border-black bg-white">
-          <h1 className="text-4xl font-black italic text-blue-600 uppercase drop-shadow-[2px_2px_0_rgba(0,0,0,0.35)]">BASED<br/>GAMES</h1>
+          <h1 className="text-4xl font-black italic text-blue-600 uppercase drop-shadow-[0.5px_0.5px_0_rgba(0,0,0,0.35)]">BASED<br/>GAMES</h1>
         </div>
         
         <nav className="flex-1 p-6 space-y-4 overflow-y-auto">
