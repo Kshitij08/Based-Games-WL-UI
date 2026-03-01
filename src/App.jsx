@@ -186,7 +186,7 @@ export default function App() {
         }}
       >
         <div className="p-8 border-b-4 border-black bg-white">
-          <h1 className="text-4xl font-black italic text-blue-600 uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">BASED<br/>GAMES</h1>
+          <h1 className="text-4xl font-black italic text-blue-600 uppercase drop-shadow-[2px_2px_0_rgba(0,0,0,0.35)]">BASED<br/>GAMES</h1>
         </div>
         
         <nav className="flex-1 p-6 space-y-4 overflow-y-auto">
@@ -243,7 +243,7 @@ export default function App() {
             backgroundPosition: 'right center'
           }}
         >
-          <h1 className="text-2xl font-black italic text-blue-600 uppercase leading-tight">BASED<br />GAMES</h1>
+          <h1 className="text-2xl font-black italic text-blue-600 uppercase leading-tight drop-shadow-[1px_1px_0_rgba(0,0,0,0.3)]">BASED<br />GAMES</h1>
           <div className="bg-sky-100 border-2 border-black px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse border border-black"></div>
             {username}
@@ -269,7 +269,7 @@ export default function App() {
         </header>
 
         {/* Scrollable Container – extra bottom padding on mobile so content clears the fixed nav */}
-        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 custom-scrollbar relative z-10 min-h-0">
+        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 md:pb-8 custom-scrollbar relative z-10 min-h-0">
           <div className="max-w-3xl mx-auto">
 
             {/* TAB: HOME */}
