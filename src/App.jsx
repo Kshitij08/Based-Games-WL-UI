@@ -347,14 +347,25 @@ export default function App() {
             {/* TAB: QUESTS */}
             {activeTab === 'quests' && (
               <div className="space-y-6 animate-in slide-in-from-right-4 fade-in duration-200">
-                {['Community', 'Posts & Engagement', 'Daily Grind'].map(category => (
-                  <div key={category} className="bg-white rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                    <h4 className="text-xl font-black text-black uppercase mb-4 flex items-center gap-2">
+                {['Community', 'Daily Grind', 'Posts & Engagement'].map(category => (
+                  <div
+                    key={category}
+                    className={`rounded-3xl p-5 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${category === 'Community' ? 'bg-yellow-400' : ''}`}
+                    style={category !== 'Community' ? { backgroundColor: '#d2d8e6' } : undefined}
+                  >
+                    <h4 className={`text-xl font-black uppercase mb-4 flex items-center gap-2 ${category === 'Community' ? 'text-black' : 'text-slate-900'}`}>
                       <Star className="text-yellow-400 fill-yellow-400 stroke-black stroke-2" size={24} />
                       {category}
                     </h4>
                     <div className="space-y-3">
-                      {TASKS.filter(t => t.category === category).map(task => {
+                      {TASKS.filter(t => t.category === category)
+                        .sort((a, b) => {
+                          const aDone = completedTasks.includes(a.id);
+                          const bDone = completedTasks.includes(b.id);
+                          if (aDone === bDone) return 0;
+                          return aDone ? 1 : -1;
+                        })
+                        .map(task => {
                         const isCompleted = completedTasks.includes(task.id);
                         return (
                           <div 
@@ -390,8 +401,8 @@ export default function App() {
             {activeTab === 'leaderboard' && (
               <div className="animate-in slide-in-from-bottom-4 fade-in duration-200 space-y-6">
                 <div className="space-y-6">
-                  {/* Detailed Cutoffs Banner */}
-                  <div className="bg-sky-100 border-4 border-black rounded-3xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-3">
+                  {/* Detailed Cutoffs Banner – Refer Squad blue outer, white inner */}
+                  <div className="bg-blue-600 border-4 border-black rounded-3xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-3">
                     <div className="flex justify-between items-center bg-white p-4 rounded-2xl border-2 border-black">
                       <div className="flex items-center gap-3">
                         <Trophy className="text-yellow-500" size={24} />
@@ -439,7 +450,7 @@ export default function App() {
                   </div>
 
                   {/* Your rank card – in flow so it doesn’t hide the leaderboard */}
-                  <div className="bg-blue-600 border-4 border-black rounded-2xl p-4 flex justify-between items-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:hidden">
+                  <div className="bg-blue-600 border-4 border-black rounded-2xl p-4 flex justify-between items-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <div className="flex items-center gap-3">
                       <span className="font-black text-xl">YOU</span>
                       <span className="text-sm bg-black/20 px-3 py-1.5 rounded-lg font-bold border border-black/30">Rank #{rank}</span>
