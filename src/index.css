@@ -6,6 +6,10 @@
   html {
     font-size: 16px;
   }
+  /* Production: deployed build often renders ~133% vs localhost; 12px base = 75% scale so it matches */
+  html.prod-scale-fix {
+    font-size: 12px !important;
+  }
   html, body {
     margin: 0;
     padding: 0;
