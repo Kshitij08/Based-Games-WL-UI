@@ -158,7 +158,7 @@ export default function App() {
     w-full flex items-center gap-4 p-4 rounded-2xl font-black uppercase transition-all border-4 
     ${activeTab === id 
       ? `bg-white border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${activeColor} translate-x-2` 
-      : `border-transparent text-slate-500 hover:bg-slate-200 hover:text-slate-800`
+      : `border-transparent text-slate-800 hover:bg-white/50 hover:text-slate-900`
     }
   `;
 
@@ -167,7 +167,16 @@ export default function App() {
     <div className="flex h-screen w-full bg-slate-200 font-sans text-slate-900 overflow-hidden">
       
       {/* DESKTOP SIDEBAR (Hidden on Mobile) */}
-      <aside className="hidden md:flex w-80 bg-slate-100 border-r-4 border-black flex-col shadow-[4px_0_15px_rgba(0,0,0,0.1)] z-50 relative">
+      <aside
+        className="hidden md:flex w-80 border-r-4 border-black flex-col shadow-[4px_0_15px_rgba(0,0,0,0.1)] z-50 relative"
+        style={{
+          backgroundColor: '#b6f569',
+          backgroundImage: "url('/9.png')",
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
         <div className="p-8 border-b-4 border-black bg-white">
           <h1 className="text-4xl font-black italic text-blue-600 uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">BASED<br/>GAMES</h1>
         </div>
@@ -187,14 +196,14 @@ export default function App() {
           </button>
         </nav>
 
-        <div className="p-6 border-t-4 border-black bg-white flex justify-between items-center">
+        <div className="p-6 border-t-4 border-black bg-pink-500 flex justify-between items-center">
           <div className="flex items-center gap-3">
-             <div className="w-10 h-10 bg-sky-100 rounded-xl border-2 border-black flex items-center justify-center text-xl">
+             <div className="w-10 h-10 bg-white/90 rounded-xl border-2 border-black flex items-center justify-center text-xl">
                {getAvatar()}
              </div>
              <div>
-               <p className="font-black text-sm uppercase">{username}</p>
-               <p className="text-xs font-bold text-slate-500">{ethBalance} ETH</p>
+               <p className="font-black text-sm uppercase text-white">{username}</p>
+               <p className="text-xs font-bold text-white/90">{ethBalance} ETH</p>
              </div>
           </div>
         </div>
@@ -215,19 +224,37 @@ export default function App() {
         </video>
         <div className="absolute inset-0 z-0 pointer-events-none bg-black/60" aria-hidden />
 
-        {/* Mobile Header (Hidden on Desktop) */}
-        <header className="md:hidden bg-white border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]">
-          <h1 className="text-2xl font-black italic text-blue-600 uppercase">BASED</h1>
+        {/* Mobile Header (Hidden on Desktop) – 10.png bg, no tiling, white behind PNG, shifted left on mobile so blue pattern isn't cut off */}
+        <header
+          className="md:hidden border-b-4 border-black p-4 flex justify-between items-center sticky top-0 z-40 shadow-[0_4px_0_0_rgba(0,0,0,1)]"
+          style={{
+            backgroundColor: '#ffffff',
+            backgroundImage: "url('/10.png')",
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'right center'
+          }}
+        >
+          <h1 className="text-2xl font-black italic text-blue-600 uppercase leading-tight">BASED<br />GAMES</h1>
           <div className="bg-sky-100 border-2 border-black px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse border border-black"></div>
             {username}
           </div>
         </header>
 
-        {/* Desktop Header Banner */}
-        <header className="hidden md:flex bg-white border-b-4 border-black p-6 justify-between items-center z-30">
+        {/* Desktop Header Banner – 10.png bg, no tiling, white behind PNG */}
+        <header
+          className="hidden md:flex border-b-4 border-black p-6 justify-between items-center z-30"
+          style={{
+            backgroundColor: '#ffffff',
+            backgroundImage: "url('/10.png')",
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
            <h2 className="text-3xl font-black uppercase text-slate-800">{activeTab}</h2>
-           <div className="bg-blue-600 text-white border-4 border-black px-5 py-2 rounded-xl font-black flex items-center gap-3 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+           <div className="bg-pink-500 text-white border-4 border-black px-5 py-2 rounded-xl font-black flex items-center gap-3 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
              <span>RANK #{rank}</span>
              <span className="text-yellow-300">• {points.toLocaleString()} PTS</span>
            </div>
@@ -525,25 +552,25 @@ export default function App() {
 
         {/* --- MOBILE BOTTOM NAVIGATION BAR (Hidden on Desktop) --- */}
         <nav className="md:hidden absolute bottom-0 w-full bg-white border-t-4 border-black p-3 flex justify-around items-center pb-safe shadow-[0_-4px_0_0_rgba(0,0,0,1)] z-50">
-          <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'home' ? 'text-pink-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
+          <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'home' ? 'text-pink-600 -translate-y-1' : 'text-slate-800 hover:text-slate-900'}`}>
             <Home size={24} className={activeTab === 'home' ? 'fill-pink-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Home</span>
             {activeTab === 'home' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-pink-600 rounded-full"></div>}
           </button>
           
-          <button onClick={() => setActiveTab('quests')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'quests' ? 'text-blue-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
+          <button onClick={() => setActiveTab('quests')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'quests' ? 'text-blue-600 -translate-y-1' : 'text-slate-800 hover:text-slate-900'}`}>
             <Star size={24} className={activeTab === 'quests' ? 'fill-blue-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Quests</span>
             {activeTab === 'quests' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-blue-600 rounded-full"></div>}
           </button>
           
-          <button onClick={() => setActiveTab('leaderboard')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'leaderboard' ? 'text-yellow-500 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
+          <button onClick={() => setActiveTab('leaderboard')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'leaderboard' ? 'text-yellow-500 -translate-y-1' : 'text-slate-800 hover:text-slate-900'}`}>
             <Trophy size={24} className={activeTab === 'leaderboard' ? 'fill-yellow-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Ranks</span>
             {activeTab === 'leaderboard' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>}
           </button>
 
-          <button onClick={() => setActiveTab('profile')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'profile' ? 'text-green-600 -translate-y-1' : 'text-slate-400 hover:text-slate-600'}`}>
+          <button onClick={() => setActiveTab('profile')} className={`flex flex-col items-center gap-1 p-2 w-16 transition-all ${activeTab === 'profile' ? 'text-green-600 -translate-y-1' : 'text-slate-800 hover:text-slate-900'}`}>
             <User size={24} className={activeTab === 'profile' ? 'fill-green-100' : ''} />
             <span className="text-[10px] font-black uppercase tracking-wider">Profile</span>
             {activeTab === 'profile' && <div className="absolute -bottom-1 w-1.5 h-1.5 bg-green-600 rounded-full"></div>}
